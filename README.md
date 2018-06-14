@@ -48,7 +48,8 @@ Set following flags
 
 Command to train model:
 
-```python train.py --name monodepth --netG monodepth --isTrain --gpu_ids 0 --batchsize 8 --filename ../dataset/filenames/kitti_train_files.txt
+```
+python train.py --name monodepth --netG monodepth --isTrain --gpu_ids 0 --batchsize 8 --filename ../dataset/filenames/kitti_train_files.txt
 ```
  Check out different flags at main_options.py
 
