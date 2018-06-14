@@ -67,7 +67,7 @@ Command to test model:
 ```
 python train.py --name monodepth --netG monodepth  --gpu_ids 0 --ext_test_in /monodepth/checkpoints/monodepth/test_img_in --load --ckpt_folder ckpt_backup --which_model monodepth --which_epoch 30
 ```
-Output of the test will be found at `opt.checkpoints_dir/opt.name/test_img_out`
+Output of the test will be found at `checkpoints_dir/name/test_img_out` where `checkpoints_dir` and `name` are flags.
 
 ### Bilinear sampler
 
