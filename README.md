@@ -68,3 +68,11 @@ python train.py --name monodepth --netG monodepth  --gpu_ids 0 --ext_test_in /mo
 ```
 Output of the test will be found at `opt.checkpoints_dir/opt.name/test_img_out`
 
+### Bilinear sampler
+
+Code for ported and in-built bilinear sampler can be found [here](https://github.com/alwynmathew/bilinear-sampler-pytorch).
+
+## Know issue
+
+Training not as stable as original tensorflow implementation. If someone could find not the issue, please open an issue in this repo and post your solution.
+
