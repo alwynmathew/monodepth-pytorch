@@ -10,7 +10,6 @@ from torch.utils.data import DataLoader
 import numpy as np
 import os
 from PIL import Image
-#import matplotlib.pyplot as plt
 import torchvision.transforms as transforms
 from base_dataloader import BaseDataset, get_params, get_transform, normalize
 
@@ -45,8 +44,6 @@ class StereoDataloader_test(Dataset):
 
 	def __getitem__(self, index):
 
-		#print(self.__left[index])
-      	
 		img1 = Image.open(self.__left[index])
 		params = get_params(self.opt, img1.size)
 
