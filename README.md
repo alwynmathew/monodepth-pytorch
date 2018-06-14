@@ -75,5 +75,5 @@ Code for ported and in-built bilinear sampler can be found [here](https://github
 
 ## Know issue
 
-Training not as stable as original tensorflow implementation. If someone could find not the issue, please open an issue in this repo and post your solution.
+Training not as stable as original tensorflow implementation. If someone could find the issue in this implementation, please open an issue in this repo and if possible post your suggestion.
 
