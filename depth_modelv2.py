@@ -15,7 +15,7 @@ import torch.nn.functional as F
 
 import mono_net
 # from bilinear_torch import * # ported from Godard's code
-from bilinear_sampler import *
+from bilinear_sampler import * # from Po-Hsun Su
 import pytorch_ssim
 import utils.util as util
 from utils.visualizer import Visualizer
