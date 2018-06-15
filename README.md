@@ -53,7 +53,7 @@ python train.py --name monodepth --netG monodepth --isTrain --gpu_ids 0 --batchs
 ```
  Check out other flags at [main_options.py](https://github.com/alwynmathew/monodepth-pytorch/blob/master/main_options.py)  
  
-Saved models and ouput disparities at each `display_freq` can be found at `/checkpoints_dir/name/` and `/checkpoints_dir/name/web/images/` respectively.
+Saved models and ouput disparities after each `display_freq` can be found at `/checkpoints_dir/name/` and `/checkpoints_dir/name/web/images/` respectively.
 
 ## Testing  
 
