@@ -51,7 +51,9 @@ Command to train model:
 ```
 python train.py --name monodepth --netG monodepth --isTrain --gpu_ids 0 --batchsize 8 --filename ../dataset/filenames/kitti_train_files.txt
 ```
- Check out other flags at [main_options.py](https://github.com/alwynmathew/monodepth-pytorch/blob/master/main_options.py)  Saved models and disparity at each `display_freq` can be found at `/checkpoints/name/` and `/checkpoints/name/web/images/` respectively.
+ Check out other flags at [main_options.py](https://github.com/alwynmathew/monodepth-pytorch/blob/master/main_options.py)  
+ 
+Saved models and disparity at each `display_freq` can be found at `/checkpoints/name/` and `/checkpoints/name/web/images/` respectively.
 
 ## Testing  
 
