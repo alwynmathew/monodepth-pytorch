@@ -14,7 +14,7 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 
 import mono_net
-# from bilinear_torch import * # ported from Clement's code
+# from bilinear_torch import * # ported from Godard's code
 from bilinear_sampler import *
 import pytorch_ssim
 import utils.util as util
@@ -155,7 +155,7 @@ class model(nn.Module):
 
 		return smoothness_x + smoothness_y
 
-	# ssim from Clement code
+	# ssim from Godard's code
 	def SSIM(self, x, y):
 		C1 = 0.01 ** 2
 		C2 = 0.03 ** 2
