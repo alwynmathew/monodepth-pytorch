@@ -14,7 +14,7 @@ from torch.autograd import Variable
 import torch.nn.functional as F
 
 import mono_net
-# from bilinear_torch import *
+# from bilinear_torch import * # ported from Clement's code
 from bilinear_sampler import *
 import pytorch_ssim
 import utils.util as util
@@ -231,8 +231,8 @@ class model(nn.Module):
 
 		## NETWORK OUTPUT
 		# GENERATE IMAGES
-		self.left_est = [self.generate_image_left(self.right_pyramid[i], self.disp_left_est[i]) for i in range(4)] 
-		self.right_est = [self.generate_image_right(self.left_pyramid[i], self.disp_right_est[i]) for i in range(4)]
+		self.left_est = [self.generate_image_left_(self.right_pyramid[i], self.disp_left_est[i]) for i in range(4)] 
+		self.right_est = [self.generate_image_right_(self.left_pyramid[i], self.disp_right_est[i]) for i in range(4)]
 
 		# LR CONSISTENCY
 		self.right_to_left_disp = [self.generate_image_left_(self.disp_right_est[i], self.disp_left_est[i]) for i in range(4)]
