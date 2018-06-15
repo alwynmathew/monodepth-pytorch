@@ -175,7 +175,7 @@ class model(nn.Module):
 
 		return torch.clamp((1 - SSIM) / 2, 0, 1)
 
-	# ssim orginal
+	# ssim from Po-Hsun Su
 	def SSIM_(self, x, y):
 
 		ssim_loss = pytorch_ssim.SSIM()
