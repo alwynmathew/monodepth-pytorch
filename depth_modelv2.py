@@ -277,7 +277,7 @@ class model(nn.Module):
 
 		if self.opt.save_fake:
 			print('image_loss: %f, disp_loss: %f, lr_loss: %f' % (self.image_loss, self.disp_gradient_loss,
-				self.lr_loss)) #, sum(self.l1_cons_)))
+				self.lr_loss))
 			print('total loss: %f' % self.total_loss)
 
 		
