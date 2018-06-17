@@ -75,7 +75,3 @@ Output of the test can be found at `checkpoints_dir/name/test_img_out` where `ch
 
 Code for ported and in-built bilinear sampler can be found [here](https://github.com/alwynmathew/bilinear-sampler-pytorch).
 
-## Know issue
-
-Training not as stable as original tensorflow implementation. Main suspect could be the bilinear sampler. 
-
