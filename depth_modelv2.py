@@ -105,20 +105,6 @@ class model(nn.Module):
 						self.G.load_state_dict(model_dict)
 
 
-	def generate_image_left(self, img, disp):
-		r = image_warp(img[:,0,:,:].unsqueeze(1), -disp)
-		g = image_warp(img[:,1,:,:].unsqueeze(1), -disp)
-		b = image_warp(img[:,2,:,:].unsqueeze(1), -disp)
-		output = torch.cat([r,g,b],1)
-		return output
-
-	def generate_image_right(self, img, disp):
-		r = image_warp(img[:,0,:,:].unsqueeze(1), disp)
-		g = image_warp(img[:,1,:,:].unsqueeze(1), disp)
-		b = image_warp(img[:,2,:,:].unsqueeze(1), disp)
-		output = torch.cat([r,g,b],1)
-		return output
-
 	def generate_image_left_(self, img, disp):
 
 		# return bilinear_sampler_1d_h(img, -disp)
@@ -218,8 +204,8 @@ class model(nn.Module):
 
 	def forward(self, input_left, input_right):
 
-		self.left_pyramid = self.scale_pyramid(input_left, 4)
-		self.right_pyramid = self.scale_pyramid(input_right, 4)
+		self.left_pyramid = self.scale_pyramid_(input_left, 4)
+		self.right_pyramid = self.scale_pyramid_(input_right, 4)
 		self.input = input_left
 
 		self.disp_est = self.G(self.input)
@@ -270,10 +256,10 @@ class model(nn.Module):
 		self.lr_loss = sum(self.lr_left_loss + self.lr_right_loss)
 
 		self.total_loss = ( 
-							self.image_loss + 
-							self.opt.disp_grad_loss_wt * self.disp_gradient_loss +
-							self.opt.lr_loss_wt * self.lr_loss
-							)
+				self.image_loss + 
+				self.opt.disp_grad_loss_wt * self.disp_gradient_loss +
+				elf.opt.lr_loss_wt * self.lr_loss
+				)
 
 		if self.opt.save_fake:
 			print('image_loss: %f, disp_loss: %f, lr_loss: %f' % (self.image_loss, self.disp_gradient_loss,
