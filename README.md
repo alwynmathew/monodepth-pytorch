@@ -49,8 +49,8 @@ Set following flags
 Command to train model:
 
 ```
-python train.py --name monodepth --netG monodepth --isTrain --gpu_ids 0
---batchsize 8 --filename ../dataset/filenames/kitti_train_files.txt
+python train.py --name monodepth --netG monodepth --isTrain --gpu_ids 0--batchsize 8 
+--filename ../dataset/filenames/kitti_train_files.txt
 ```
  Check out other flags at [main_options.py](https://github.com/alwynmathew/monodepth-pytorch/blob/master/main_options.py)  
  
@@ -68,7 +68,8 @@ Set following flags
 
 Command to test model:
 ```
-python train.py --name monodepth --netG monodepth  --gpu_ids 0 --ext_test_in /monodepth/ckpt_backup/monodepth/test_img_in --load --ckpt_folder ckpt_backup --which_model monodepth --which_epoch 30
+python train.py --name monodepth --netG monodepth  --gpu_ids 0 
+--ext_test_in /monodepth/ckpt_backup/monodepth/test_img_in --load --ckpt_folder ckpt_backup --which_model monodepth --which_epoch 30
 ```
 Output of the test can be found at `checkpoints_dir/name/test_img_out` where `checkpoints_dir` and `name` are flags.  Post-processing not yet implemented in the current version.
 
