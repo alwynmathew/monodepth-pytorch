@@ -60,7 +60,7 @@ Saved models and ouput disparities after each `display_freq` can be found at `/c
 
 Set following flags
 
-`--ext_test_in` flag to dir of est images eg. `/monodepth/checkpoints/monodepth/test_img_in `   
+`--ext_test_in` flag to dir of test images eg. `/monodepth/checkpoints/monodepth/test_img_in `   
 `--load` to `True`    
 `--ckpt_folder` to path of your saved model eg. `ckpt_backup `   
 `--which_model` to model name eg. `monodepth `   
