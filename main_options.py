@@ -21,7 +21,7 @@ class MainOptions():
 		self.parser.add_argument('--norm', type=str, default='instance', help='instance normalization or batch normalization')
 		self.parser.add_argument('--use_dropout', action='store_true', default=True, help='use dropout for the generator')
 
-        # input/output sizes
+        	# input/output sizes
 		self.parser.add_argument('--batchsize',type=int,default=4,help='input batch size')
 		self.parser.add_argument('--input_height',type=int,default=256,help='scale image to this size')
 		self.parser.add_argument('--input_width',type=int,default=512,help='scale image to this size')
@@ -29,7 +29,7 @@ class MainOptions():
 		self.parser.add_argument('--input_nc', type=int, default=3, help='# of input image channels genetator')
 		self.parser.add_argument('--output_nc', type=int, default=2, help='# of output image channels genetator')
 
-        # for setting inputs
+        	# for setting inputs
 		self.parser.add_argument('--dataroot',type=str,default='../dataset/kitti/')
 		self.parser.add_argument('--filename',type=str,default='../dataset/filenames/kitti_train_files_mini.txt')  # kitti_temp_files_test.txt / kitti_train_files_mini.txt / kitti_train_files.txt
 		self.parser.add_argument('--resize_or_crop', type=str, default='resize', help='scaling and cropping of images at load time [resize_and_crop|crop|scale_width|scale_width_and_crop]')
