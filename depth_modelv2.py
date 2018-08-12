@@ -106,14 +106,12 @@ class model(nn.Module):
 
 
 	def generate_image_left_(self, img, disp):
-
 		# return bilinear_sampler_1d_h(img, -disp)
-		return image_warp(img, -disp)
+		return apply_disparity(img, -disp)
 
 	def generate_image_right_(self, img, disp):
-
 		# return bilinear_sampler_1d_h(img, disp)
-		return image_warp(img, -disp)
+		return apply_disparity(img, -disp)
 
 	def gradient_x(self, img):
 		gx = img[:,:,:,:-1] - img[:,:,:,1:]
