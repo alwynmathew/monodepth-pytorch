@@ -7,32 +7,76 @@
 
 from __future__ import absolute_import, division, print_function
 import torch
-import torch.nn.functional as F
-from torch.autograd import Variable
+from torch.nn.functional import pad
 
-def image_warp(img, depth, padding_mode='zeros'):
-    
-    # img: the source image (where to sample pixels) -- [B, 3, H, W]
-    # depth: depth map of the target image -- [B, H, W]
-    # Returns: Source image warped to the target image
-   
+from main_options import MainOptions
+opt = MainOptions().parse() 
 
-    b, _, h, w = depth.size() 
-    i_range = torch.autograd.Variable(torch.arange(0, h).view(1, h, 1).expand(1,h,w),requires_grad = False)# .type_as(depth)  # [1, H, W]  copy 0-height for w times : y coord
-    j_range = torch.autograd.Variable(torch.arange(0, w).view(1, 1, w).expand(1,h,w),requires_grad = False)# .type_as(depth)  # [1, H, W]  copy 0-width for h times  : x coord
+def apply_disparity(input_images, x_offset, wrap_mode='border', tensor_type = 'torch.cuda.FloatTensor'):
+    num_batch, num_channels, height, width = input_images.size()
 
-    pixel_coords = torch.stack((j_range, i_range), dim=1).float().cuda()  # [1, 2, H, W]
-    batch_pixel_coords = pixel_coords[:,:,:,:].expand(b,2,h,w).contiguous().view(b, 2, -1)  # [B, 2, H*W]
+    # Handle both texture border types
+    edge_size = 0
+    if wrap_mode == 'border':
+        edge_size = 1
+        # Pad last and second-to-last dimensions by 1 from both sides
+        input_images = pad(input_images, (1, 1, 1, 1))
+    elif wrap_mode == 'edge':
+        edge_size = 0
+    else:
+        return None
 
-    X = batch_pixel_coords[:, 0]  + depth.contiguous().view(b,-1) # [B, H*W]
-    Y = batch_pixel_coords[:, 1]
+    # Put channels to slowest dimension and flatten batch with respect to others
+    input_images = input_images.permute(1, 0, 2, 3).contiguous()
+    im_flat = input_images.view(num_channels, -1)
 
-    X_norm = 2 * X /(w-1) - 1  # FloatTensor  Normalized, -1 if on extreme left, 1 if on extreme right (x = w-1) [B, H*W]
-    Y_norm = 2 * Y /(h-1) - 1  # Idem [B, H*W]
+    # Create meshgrid for pixel indicies (PyTorch doesn't have dedicated
+    # meshgrid function)
+    x = torch.linspace(0, width - 1, width).repeat(height, 1).type(tensor_type).to(opt.gpu_ids)
+    y = torch.linspace(0, height - 1, height).repeat(width, 1).transpose(0, 1).type(tensor_type).to(opt.gpu_ids)
+    # Take padding into account
+    x = x + edge_size
+    y = y + edge_size
+    # Flatten and repeat for each image in the batch
+    x = x.view(-1).repeat(1, num_batch)
+    y = y.view(-1).repeat(1, num_batch)
 
-    pixel_coords = torch.stack([X_norm, Y_norm], dim=2)  # [B, H*W, 2]
-    pixel_coords = pixel_coords.view(b,h,w,2)  # [B, H, W, 2]
+    # Now we want to sample pixels with indicies shifted by disparity in X direction
+    # For that we convert disparity from % to pixels and add to X indicies
+    x = x + x_offset.contiguous().view(-1) * width
+    # Make sure we don't go outside of image
+    x = torch.clamp(x, 0.0, width - 1 + 2 * edge_size)
+    # Round disparity to sample from integer-valued pixel grid
+    y0 = torch.floor(y)
+    # In X direction round both down and up to apply linear interpolation
+    # between them later
+    x0 = torch.floor(x)
+    x1 = x0 + 1
+    # After rounding up we might go outside the image boundaries again
+    x1 = x1.clamp(max=(width - 1 + 2 * edge_size))
 
-    projected_img = torch.nn.functional.grid_sample(img, pixel_coords, padding_mode=padding_mode)
+    # Calculate indices to draw from flattened version of image batch
+    dim2 = (width + 2 * edge_size)
+    dim1 = (width + 2 * edge_size) * (height + 2 * edge_size)
+    # Set offsets for each image in the batch
+    base = dim1 * torch.arange(num_batch).type(tensor_type).to(opt.gpu_ids)
+    base = base.view(-1, 1).repeat(1, height * width).view(-1)
+    # One pixel shift in Y  direction equals dim2 shift in flattened array
+    base_y0 = base + y0 * dim2
+    # Add two versions of shifts in X direction separately
+    idx_l = base_y0 + x0
+    idx_r = base_y0 + x1
 
-    return projected_img
+    # Sample pixels from images
+    pix_l = im_flat.gather(1, idx_l.repeat(num_channels, 1).long())
+    pix_r = im_flat.gather(1, idx_r.repeat(num_channels, 1).long())
+
+    # Apply linear interpolation to account for fractional offsets
+    weight_l = x1 - x
+    weight_r = x - x0
+    output = weight_l * pix_l + weight_r * pix_r
+
+    # Reshape back into image batch and permute back to (N,C,H,W) shape
+    output = output.view(num_channels, num_batch, height, width).permute(1,0,2,3)
+
+    return output
