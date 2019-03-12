@@ -1,0 +1,15 @@
+.ipynb_checkpoints/
+__pycache__/
+.idea
+data/
+.envrc
+params.ini
+.ropeproject/
+*result*
+tmp/
+venv/
+
+runs/
+build/
+*cmake-build-debug*
+*cmake-build-release*

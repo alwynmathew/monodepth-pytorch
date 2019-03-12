@@ -1,4 +1,7 @@
 # Monodepth in Pytorch
+
+*NOTE: Repo will be clean up and refactored soon. Roll back to initially stage ec97056, if necessary*
+
 Pytorch implementation of unsupervised single image depth prediction using a convolutional neural network. This is ported from the [original tensorflow implementation](https://github.com/mrharicot/monodepth) by [Clément Godard](https://github.com/mrharicot).
 
 <p align="center">
